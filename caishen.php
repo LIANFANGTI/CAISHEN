@@ -1,6 +1,8 @@
 <?php
     
 	include 'fun.php';
+	include './lib/httplib.class.php';
+	
 	header("content-type:text/json;charset=utf-8");
     //小说名称
     $bookName = $_GET['bookName'];
@@ -8,8 +10,8 @@
     
 
     //获取token
-    $url1 = 'http://api.reader.m.so.com/mbook/index.php?q='.$bookName.'&src=sohome&a=search';
-	// print_r("<a href='".$url1."'>第一次请求地址$url1</a><br>");
+    $url1 = 'https://api.reader.m.so.com/mbook/index.php?q='.$bookName.'&src=sohome&a=search';
+//	 print_r("<a href='".$url1."'>第一次请求地址$url1</a><br>");
     // echo '第一次请求url:<br>'.$url,'<br>';
 
     $ch = curl_init();
@@ -20,19 +22,25 @@
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
     $rs = curl_exec($ch);
+    
+//  print_r($rs);
     curl_close($ch);
-	
+    
+//  $d=GetUrl($url1);
+//	print_r($d);
     //解析token
+  
+//  $token=1;
     $token = explode('window.mbook_token="', $rs);
     $token = explode('"</script> </head>', $token[1]);
     $token = trim($token[0]);
     $token = urlencode(utf8_encode($token));
-	// print_r($token);
-    // echo '获取到的token:<br>',$token,'<br>';
+//	 print_r($token);
+//     echo '获取到的token:<br>',$token,'<br>';
 
     //抓取数据
-    $url = 'http://api.reader.m.so.com/mbook/index.php?q='.$bookName.'&src=sohome&a=querySearch&s=0&n=20&token='.$token;
-	// print_r("<a href='".$url."]'>生成请求地址$url</a><br>");
+     $url = 'https://api.reader.m.so.com/mbook/index.php?q='.$bookName.'&src=sohome&a=querySearch&s=0&n=20&token='.$token;
+//	 print_r("<a href='".$url."]'>生成请求地址$url</a><br>");
     // echo '第二次请求url:<br>'.$url,'<br>';
 
     $ch = curl_init();

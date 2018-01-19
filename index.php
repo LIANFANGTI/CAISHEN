@@ -1,9 +1,14 @@
 <?php
 
 include 'fun.php';
+include './lib/httplib.class.php';
 
 if(!isset($_GET['bid'])){exit('参数错误！');}
-$html = GetUrl('http://api.reader.m.so.com/mbook/index.php?m=mbook&c=index&a=sources&src=sohome&bid='.$_GET['bid']);
+$url='https://api.reader.m.so.com/mbook/index.php?m=mbook&c=index&a=sources&src=sohome&bid='.$_GET['bid'];
+//echo $url;
+$result = get($url);
+$html=$result->content;
+//print_r($html);   
 preg_match_all('{<li data-site="(.*?)" data-sid="([0-9]+)"><h1>(.*?)<a>(.*?)</a></h1><p>(.*?)</p></li>}',$html,$list);
 
 
